@@ -16,6 +16,6 @@ func NewBookingManager(db storage.DBStorage) *BookingManager {
 	}
 }
 
-func (m *BookingManager) NewBooking(ctx context.Context, body []byte) error {
-	return m.DBStorage.Insert(ctx)
+func (m *BookingManager) NewBooking(ctx context.Context, booking *storage.Booking) error {
+	return m.DBStorage.Insert(ctx, booking)
 }
