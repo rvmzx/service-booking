@@ -51,3 +51,21 @@ func (m *MongoDB) AddService(ctx context.Context, service *Service) error {
 	fmt.Println("Inserted document ID:", result.InsertedID)
 	return nil
 }
+
+func (m *MongoDB) GetServiceById(ctx context.Context, id string) (*Service, error) {
+	collection := m.client.Database("bookings-service").Collection("services")
+
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{"_id": objectID}
+	var service Service
+	err = collection.FindOne(ctx, filter).Decode(&service)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
+}

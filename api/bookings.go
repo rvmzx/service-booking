@@ -23,3 +23,7 @@ func (m *BookingManager) NewBooking(ctx context.Context, booking *storage.Bookin
 func (m *BookingManager) GetAllBookings(ctx context.Context) ([]*storage.Booking, error) {
 	return m.dbStorage.GetAllBookings(ctx)
 }
+
+func (m *BookingManager) GetServiceById(ctx context.Context, id string) (*storage.Service, error) {
+	return m.dbStorage.GetServiceById(ctx, id)
+}

@@ -18,6 +18,7 @@ func NewRouter(bm *api.BookingManager) *mux.Router {
 	router.HandleFunc("/book", handleBook(bm)).Methods("POST")
 
 	router.HandleFunc("/services", handleServices(bm)).Methods("GET")
+	router.HandleFunc("/services/{id}", handleServiceById(bm)).Methods("GET")
 	router.HandleFunc("/service", handleService(bm)).Methods("POST")
 
 	return router
@@ -81,6 +82,28 @@ func handleServices(bm *api.BookingManager) http.HandlerFunc {
 		}
 
 		responseJSON, err := json.Marshal(bookings)
+		if err != nil {
+			http.Error(w, "Error encoding JSON", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(responseJSON)
+	}
+}
+
+func handleServiceById(bm *api.BookingManager) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		id := vars["id"]
+		service, err := bm.GetServiceById(r.Context(), id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		responseJSON, err := json.Marshal(service)
 		if err != nil {
 			http.Error(w, "Error encoding JSON", http.StatusInternalServerError)
 			return
