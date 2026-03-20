@@ -13,6 +13,7 @@ type DBStorage interface {
 
 	GetAllServices(context.Context) ([]*Service, error)
 	AddService(context.Context, *Service) error
+	AddService2(context.Context, *Service) error
 }
 
 type MongoDB struct {
